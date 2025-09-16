@@ -1,0 +1,67 @@
+# 📡 ESP32 Feeding Behavior Controller
+
+This folder contains the ESP32 code that handles **feeding event detection, weight measurement, and IoT communication** for the animal feeding behavior monitoring system.  
+It integrates **load cells, ultrasonic sensors, and DHT sensors**, and publishes data via **MQTT** to the Raspberry Pi for further computer vision processing.
+
+---
+
+## ⚙️ Features
+- **Load Cell (HX711)** → Measures feed weight before and after feeding.  
+- **Ultrasonic Sensor** → Detects pig presence in the feeding zone (≤ 60 cm).  
+- **DHT22 + DHT11** → Captures temperature and humidity in the pig pen.  
+- **MQTT Communication** → Sends feed consumption, environment data, and commands to Raspberry Pi.  
+- **Camera Triggering** → Sends start/stop signals to vision pipeline when pigs enter/exit.  
+
+---
+
+## 📂 Files
+- `feed_mqtt_ultrasonic.ino` → Main ESP32 program:
+  - Connects to WiFi + MQTT broker.  
+  - Reads sensors (HX711, ultrasonic, DHT22/DHT11).  
+  - Publishes feed weight, environment data, and pig occupancy status.  
+  - Sends trigger commands to start/stop YOLOv8 on Raspberry Pi.  
+
+---
+
+## 🖥️ MQTT Topics
+- **Feed Weight (per breed):**
+  - `pigFarm/foodWeight/berkshire`  
+  - `pigFarm/foodWeight/landrace`  
+  - `pigFarm/foodWeight/pietrain`  
+  - `pigFarm/foodWeight/duroc`  
+
+- **Environment Monitoring:**
+  - `pigFarm/status/temperature`  
+  - `pigFarm/status/humidity`  
+  - `pigFarm/status/debug`  
+
+- **Commands:**
+  - `pigFarm/command/cellstatus` (from Pi → ESP32: pen occupancy + pig type)  
+  - `pigFarm/command/startcamera` (ESP32 → Pi: trigger camera system)  
+
+---
+
+## 🚀 How It Works
+1. Pig enters the feeding area → **Ultrasonic sensor detects presence**.  
+2. ESP32 records **initial feed weight (FPA)**.  
+3. Pig leaves the area → ESP32 records **final feed weight (FL)**.  
+4. Feed consumed = **FPA − FL**.  
+5. ESP32 publishes feed intake under the correct breed topic via MQTT.  
+6. At the same time, ESP32 sends commands to Raspberry Pi to start/stop computer vision detection.  
+7. DHT22/DHT11 periodically publish temperature and humidity data for farm monitoring.  
+
+---
+
+## 🛠️ Hardware Used
+- ESP32 microcontroller  
+- HX711 amplifier + 20 kg load cells  
+- Ultrasonic sensor (HC-SR04)  
+- DHT22 & DHT11 sensors  
+- WiFi router (for MQTT communication)  
+
+---
+
+## 📌 Notes
+- Update **WiFi SSID/password** and **MQTT broker IP** before flashing.  
+- Requires MQTT broker (e.g., Mosquitto) running on the Raspberry Pi or local server.  
+- Calibration factor for HX711 (`penB.set_scale(218.42)`) may need adjustment per setup.  
