@@ -24,8 +24,8 @@ The system combines **computer vision, ultrasonic sensors, and load cells** to d
 ---
 
 ## 📂 Files in This Folder
-- `feeding_pipeline.py` → Main script integrating ultrasonic trigger, YOLOv8 inference, and feed weight measurement.  
-- `yolo_inference.py` → YOLOv8 pig detection and classification.  
+- `feeding_ComputerVison` → Main script integrating ultrasonic trigger, YOLOv8 inference, and feed weight measurement.  
+- `esp32_integration/` → Encapsulation of ESP32 sensing and mqtt communication.  
 - `feed_weight_esp32/` → ESP32 + HX711 code for load cell integration.  
 - `ultrasonic_trigger/` → ESP32 ultrasonic sensor trigger code.  
 
