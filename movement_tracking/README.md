@@ -16,7 +16,6 @@ Both methods allow pigs to be tracked across frames while monitoring their movem
 
 * **`centroid_tracking.py`** → Tracks pigs by comparing bounding box centroids frame-to-frame.
 * **`sort_tracking.py`** → Uses SORT (Simple Online and Realtime Tracking) for more robust and stable tracking.
-* **`sort.py`** → Required helper module for SORT-based tracking (Kalman filter + association).
 
 ---
 
